@@ -1,8 +1,9 @@
 package com.marketplace.mapper;
 
 import com.marketplace.dto.endereco.EnderecoRespostaDTO;
-import com.marketplace.dto.usuario.ClienteCriacaoDTO;
-import com.marketplace.dto.usuario.ClienteRespostaDTO;
+import com.marketplace.dto.usuario.cliente.ClienteAtualizacaoDTO;
+import com.marketplace.dto.usuario.cliente.ClienteCriacaoDTO;
+import com.marketplace.dto.usuario.cliente.ClienteRespostaDTO;
 import com.marketplace.model.Cliente;
 import com.marketplace.model.Endereco;
 import lombok.RequiredArgsConstructor;
@@ -53,5 +54,12 @@ public class ClienteMapper {
                 cliente.getDataCadastro(),
                 cliente.getDataAtualizacao()
         );
+    }
+
+    public void atualizarEntidade(Cliente entidade, ClienteAtualizacaoDTO dto) {
+        if (dto.nome() != null) entidade.setNome(dto.nome());
+        if (dto.email() != null) entidade.setEmail(dto.email());
+        if (dto.celular() != null) entidade.setCelular(dto.celular());
+        if (dto.imagem() != null) entidade.setImagem(dto.imagem());
     }
 }

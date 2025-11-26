@@ -1,8 +1,9 @@
 package com.marketplace.service;
 
 import com.marketplace.dto.endereco.EnderecoCriacaoDTO;
-import com.marketplace.dto.usuario.ClienteCriacaoDTO;
-import com.marketplace.dto.usuario.ClienteRespostaDTO;
+import com.marketplace.dto.usuario.cliente.ClienteAtualizacaoDTO;
+import com.marketplace.dto.usuario.cliente.ClienteCriacaoDTO;
+import com.marketplace.dto.usuario.cliente.ClienteRespostaDTO;
 import com.marketplace.mapper.ClienteMapper;
 import com.marketplace.model.Cliente;
 import com.marketplace.repository.ClienteRepository;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -35,5 +37,14 @@ public class ClienteService {
         return clienteRepository.findAll().stream()
                 .map(clienteMapper::mapearParaClienteRespostaDTO)
                 .toList();
+    }
+
+    public ClienteRespostaDTO atualizarCliente(UUID clienteId, ClienteAtualizacaoDTO dto) {
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow();
+
+        clienteMapper.atualizarEntidade(cliente, dto);
+
+        return clienteMapper.mapearParaClienteRespostaDTO(clienteRepository.save(cliente));
     }
 }

@@ -1,4 +1,4 @@
-package com.marketplace.dto.usuario;
+package com.marketplace.dto.usuario.dono;
 
 import jakarta.validation.constraints.*;
 

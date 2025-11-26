@@ -1,4 +1,4 @@
-package com.marketplace.dto.usuario;
+package com.marketplace.dto.usuario.cliente;
 
 import com.marketplace.dto.endereco.EnderecoCriacaoDTO;
 import jakarta.validation.Valid;
