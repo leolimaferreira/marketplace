@@ -1,9 +1,13 @@
 package com.marketplace.exception.handler;
 
+import com.marketplace.dto.error.ErroCampo;
 import com.marketplace.dto.error.RespostaErro;
-import com.marketplace.exception.ConflictoException;
+import com.marketplace.exception.CampoInvalidoException;
+import com.marketplace.exception.ConflitoException;
 import com.marketplace.exception.NaoEncontradoException;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,9 +23,27 @@ public class GlobalExceptionHandler {
         return new RespostaErro(HttpStatus.NOT_FOUND.value(), e.getMessage(), List.of());
     }
 
-    @ExceptionHandler(ConflictoException.class)
+    @ExceptionHandler(ConflitoException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public RespostaErro handleConflictoException(ConflictoException e) {
+    public RespostaErro handleConflitoException(ConflitoException e) {
         return new RespostaErro(HttpStatus.CONFLICT.value(), e.getMessage(), List.of());
+    }
+
+    @ExceptionHandler(CampoInvalidoException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RespostaErro handleCampoInvalidoException(CampoInvalidoException e) {
+        return RespostaErro.of(
+                HttpStatus.BAD_REQUEST,
+                "Erro de validação",
+                List.of(new ErroCampo(e.getCampo(), e.getMessage()))
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public RespostaErro handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        List<FieldError> fieldErrors = e.getFieldErrors();
+        List<ErroCampo> errosList = fieldErrors.stream().map(fe -> new ErroCampo(fe.getField(), fe.getDefaultMessage())).toList();
+        return new RespostaErro(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Erro de validação", errosList);
     }
 }
