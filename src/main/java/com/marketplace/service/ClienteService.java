@@ -40,11 +40,19 @@ public class ClienteService {
     }
 
     public ClienteRespostaDTO atualizarCliente(UUID clienteId, ClienteAtualizacaoDTO dto) {
-        Cliente cliente = clienteRepository.findById(clienteId)
+        Cliente cliente = clienteRepository.findByIdAndAtivo(clienteId)
                 .orElseThrow();
 
         clienteMapper.atualizarEntidade(cliente, dto);
 
         return clienteMapper.mapearParaClienteRespostaDTO(clienteRepository.save(cliente));
+    }
+
+    public void deletarCliente(UUID clienteId) {
+        Cliente cliente = clienteRepository.findByIdAndAtivo(clienteId)
+                .orElseThrow();
+
+        cliente.setAtivo(false);
+        clienteRepository.save(cliente);
     }
 }

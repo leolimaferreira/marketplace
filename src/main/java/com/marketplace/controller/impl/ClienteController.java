@@ -37,4 +37,10 @@ public class ClienteController implements ControllerGenerico {
     public ResponseEntity<ClienteRespostaDTO> atualizarCliente(@PathVariable(name = "id") UUID clienteId, @RequestBody ClienteAtualizacaoDTO dto) {
         return ResponseEntity.ok(clienteService.atualizarCliente(clienteId, dto));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarCliente(@PathVariable(name = "id") UUID clienteId) {
+        clienteService.deletarCliente(clienteId);
+        return ResponseEntity.noContent().build();
+    }
 }
