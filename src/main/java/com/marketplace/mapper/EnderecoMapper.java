@@ -2,6 +2,7 @@ package com.marketplace.mapper;
 
 import com.marketplace.dto.endereco.EnderecoCriacaoDTO;
 import com.marketplace.dto.endereco.EnderecoRespostaDTO;
+import com.marketplace.exception.NaoEncontradoException;
 import com.marketplace.model.Cliente;
 import com.marketplace.model.Endereco;
 import com.marketplace.repository.ClienteRepository;
@@ -18,7 +19,7 @@ public class EnderecoMapper {
 
     public Endereco mapearParaEndereco(EnderecoCriacaoDTO dto, UUID clienteId) {
         Cliente cliente = clienteRepository.findByIdAndAtivo(clienteId)
-                .orElseThrow();
+                .orElseThrow(() -> new NaoEncontradoException("Cliente nao encontrado"));
 
         Endereco endereco = new Endereco();
         endereco.setLogradouro(dto.logradouro());

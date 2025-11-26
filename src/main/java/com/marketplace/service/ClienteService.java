@@ -4,6 +4,7 @@ import com.marketplace.dto.endereco.EnderecoCriacaoDTO;
 import com.marketplace.dto.usuario.cliente.ClienteAtualizacaoDTO;
 import com.marketplace.dto.usuario.cliente.ClienteCriacaoDTO;
 import com.marketplace.dto.usuario.cliente.ClienteRespostaDTO;
+import com.marketplace.exception.NaoEncontradoException;
 import com.marketplace.mapper.ClienteMapper;
 import com.marketplace.model.Cliente;
 import com.marketplace.repository.ClienteRepository;
@@ -39,18 +40,20 @@ public class ClienteService {
                 .toList();
     }
 
+    @Transactional
     public ClienteRespostaDTO atualizarCliente(UUID clienteId, ClienteAtualizacaoDTO dto) {
         Cliente cliente = clienteRepository.findByIdAndAtivo(clienteId)
-                .orElseThrow();
+                .orElseThrow(() -> new NaoEncontradoException("Cliente nao encontrado"));
 
         clienteMapper.atualizarEntidade(cliente, dto);
 
         return clienteMapper.mapearParaClienteRespostaDTO(clienteRepository.save(cliente));
     }
 
+    @Transactional
     public void deletarCliente(UUID clienteId) {
         Cliente cliente = clienteRepository.findByIdAndAtivo(clienteId)
-                .orElseThrow();
+                .orElseThrow(() -> new NaoEncontradoException("Cliente nao encontrado"));
 
         cliente.setAtivo(false);
         clienteRepository.save(cliente);
