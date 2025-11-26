@@ -1,6 +1,7 @@
 package com.marketplace.exception.handler;
 
 import com.marketplace.dto.error.RespostaErro;
+import com.marketplace.exception.ConflictoException;
 import com.marketplace.exception.NaoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,5 +17,11 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public RespostaErro handleNaoEncontradoException(NaoEncontradoException e) {
         return new RespostaErro(HttpStatus.NOT_FOUND.value(), e.getMessage(), List.of());
+    }
+
+    @ExceptionHandler(ConflictoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public RespostaErro handleConflictoException(ConflictoException e) {
+        return new RespostaErro(HttpStatus.CONFLICT.value(), e.getMessage(), List.of());
     }
 }
