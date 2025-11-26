@@ -1,6 +1,6 @@
 package com.marketplace.validator;
 
-import com.marketplace.exception.ConflictoException;
+import com.marketplace.exception.ConflitoException;
 import com.marketplace.model.Usuario;
 import com.marketplace.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class UsuarioValidator {
 
     public void validarEmail(Usuario usuario) {
         if (existeUsuarioComMesmoEmail(usuario)) {
-            throw new ConflictoException("Já existe um usuário com esse email cadastrado");
+            throw new ConflitoException("Já existe um usuário com esse email cadastrado");
         }
     }
 
