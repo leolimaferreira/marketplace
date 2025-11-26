@@ -10,6 +10,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ClienteService {
@@ -27,5 +29,11 @@ public class ClienteService {
         enderecoService.criarEndereco(endereco, clienteSalvo.getId());
 
         return clienteMapper.mapearParaClienteRespostaDTO(clienteSalvo);
+    }
+
+    public List<ClienteRespostaDTO> listarClientes() {
+        return clienteRepository.findAll().stream()
+                .map(clienteMapper::mapearParaClienteRespostaDTO)
+                .toList();
     }
 }
