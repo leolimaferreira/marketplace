@@ -52,7 +52,8 @@ public class ClienteMapper {
                 cliente.getImagem(),
                 enderecosRespostaDTO,
                 cliente.getDataCadastro(),
-                cliente.getDataAtualizacao()
+                cliente.getDataAtualizacao(),
+                cliente.getAtivo()
         );
     }
 

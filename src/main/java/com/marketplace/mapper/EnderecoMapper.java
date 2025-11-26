@@ -17,7 +17,7 @@ public class EnderecoMapper {
     private final ClienteRepository clienteRepository;
 
     public Endereco mapearParaEndereco(EnderecoCriacaoDTO dto, UUID clienteId) {
-        Cliente cliente = clienteRepository.findById(clienteId)
+        Cliente cliente = clienteRepository.findByIdAndAtivo(clienteId)
                 .orElseThrow();
 
         Endereco endereco = new Endereco();
