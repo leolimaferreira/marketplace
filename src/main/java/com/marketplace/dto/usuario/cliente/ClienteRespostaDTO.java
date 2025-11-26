@@ -18,6 +18,7 @@ public record ClienteRespostaDTO(
         String imagem,
         List<EnderecoRespostaDTO> enderecos,
         LocalDateTime criadoEm,
-        LocalDateTime atualizadoEm
+        LocalDateTime atualizadoEm,
+        Boolean ativo
 ) {
 }
