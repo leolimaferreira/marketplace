@@ -8,6 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "donos")
+@DiscriminatorValue("DONO")
 @Setter
 @Getter
 public class Dono extends Usuario {
