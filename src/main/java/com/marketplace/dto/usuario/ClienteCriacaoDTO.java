@@ -3,8 +3,8 @@ package com.marketplace.dto.usuario;
 import com.marketplace.dto.endereco.EnderecoCriacaoDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
+
 import java.time.LocalDate;
-import java.util.List;
 
 public record ClienteCriacaoDTO(
         @NotBlank(message = "Nome é obrigatório")
@@ -37,6 +37,6 @@ public record ClienteCriacaoDTO(
         String imagem,
 
         @Valid
-        @NotEmpty(message = "Cliente deve ter pelo menos um endereço")
-        List<EnderecoCriacaoDTO> enderecos
+        @NotNull(message = "Cliente deve ter pelo menos um endereço")
+        EnderecoCriacaoDTO endereco
 ) {}
