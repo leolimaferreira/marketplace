@@ -11,6 +11,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "usuarios")
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "tipo")
 @Setter
 @Getter
 public class Usuario {
