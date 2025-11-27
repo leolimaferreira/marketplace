@@ -50,7 +50,7 @@ public class ClienteService {
 
         usuarioValidator.validarEmail(cliente);
 
-        clienteMapper.atualizarEntidade(cliente, dto);
+        clienteMapper.atualizarCliente(cliente, dto);
 
         return clienteMapper.mapearParaClienteRespostaDTO(clienteRepository.save(cliente));
     }

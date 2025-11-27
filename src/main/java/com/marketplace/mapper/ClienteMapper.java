@@ -57,7 +57,7 @@ public class ClienteMapper {
         );
     }
 
-    public void atualizarEntidade(Cliente entidade, ClienteAtualizacaoDTO dto) {
+    public void atualizarCliente(Cliente entidade, ClienteAtualizacaoDTO dto) {
         if (dto.nome() != null) entidade.setNome(dto.nome());
         if (dto.email() != null) entidade.setEmail(dto.email());
         if (dto.celular() != null) entidade.setCelular(dto.celular());

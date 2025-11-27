@@ -1,5 +1,6 @@
 package com.marketplace.mapper;
 
+import com.marketplace.dto.produto.ProdutoAtualizacaoDTO;
 import com.marketplace.dto.produto.ProdutoCriacaoDTO;
 import com.marketplace.dto.produto.ProdutoRespostaDTO;
 import com.marketplace.model.Produto;
@@ -33,5 +34,14 @@ public class ProdutoMapper {
                 produto.getDataAtualizacao(),
                 produto.getAtivo()
         );
+    }
+
+    public void atualizarProduto(Produto produto, ProdutoAtualizacaoDTO dto) {
+        if (dto.nome() != null) produto.setNome(dto.nome());
+        if (dto.descricao() != null) produto.setDescricao(dto.descricao());
+        if (dto.precoCompra() != null) produto.setPrecoCompra(dto.precoCompra());
+        if (dto.precoVenda() != null) produto.setPrecoVenda(dto.precoVenda());
+        if (dto.quantidade() != null) produto.setQuantidade(dto.quantidade());
+        if (dto.imagem() != null) produto.setImagem(dto.imagem());
     }
 }
