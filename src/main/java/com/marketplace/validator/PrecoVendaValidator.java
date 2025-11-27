@@ -15,8 +15,15 @@ public class PrecoVendaValidator implements ConstraintValidator<PrecoVendaValido
             Field precoCompraField = dto.getClass().getDeclaredField("precoCompra");
             Field precoVendaField = dto.getClass().getDeclaredField("precoVenda");
 
+            precoCompraField.setAccessible(true);
+            precoVendaField.setAccessible(true);
+
             BigDecimal precoCompra = (BigDecimal) precoCompraField.get(dto);
             BigDecimal precoVenda = (BigDecimal) precoVendaField.get(dto);
+
+            if (precoCompra == null && precoVenda == null) {
+                return true;
+            }
 
             if (precoCompra == null || precoVenda == null) {
                 return true;
@@ -24,6 +31,8 @@ public class PrecoVendaValidator implements ConstraintValidator<PrecoVendaValido
 
             return precoVenda.compareTo(precoCompra) > 0;
 
+        } catch (NoSuchFieldException e) {
+            return true;
         } catch (Exception e) {
             return false;
         }

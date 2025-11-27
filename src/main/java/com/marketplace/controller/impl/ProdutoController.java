@@ -1,6 +1,7 @@
 package com.marketplace.controller.impl;
 
 import com.marketplace.controller.ControllerGenerico;
+import com.marketplace.dto.produto.ProdutoAtualizacaoDTO;
 import com.marketplace.dto.produto.ProdutoCriacaoDTO;
 import com.marketplace.dto.produto.ProdutoRespostaDTO;
 import com.marketplace.service.ProdutoService;
@@ -43,6 +44,14 @@ public class ProdutoController implements ControllerGenerico {
                 pagina,
                 tamanho
         ));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProdutoRespostaDTO> atualizarProduto(
+            @PathVariable(name = "id") UUID id,
+            @RequestBody @Valid ProdutoAtualizacaoDTO dto
+    ) {
+        return ResponseEntity.ok(produtoService.atualizarProduto(id, dto));
     }
 
     @DeleteMapping("/{id}")

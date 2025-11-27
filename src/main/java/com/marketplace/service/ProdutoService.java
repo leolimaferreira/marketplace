@@ -1,5 +1,6 @@
 package com.marketplace.service;
 
+import com.marketplace.dto.produto.ProdutoAtualizacaoDTO;
 import com.marketplace.dto.produto.ProdutoCriacaoDTO;
 import com.marketplace.dto.produto.ProdutoRespostaDTO;
 import com.marketplace.exception.NaoEncontradoException;
@@ -29,6 +30,7 @@ public class ProdutoService {
     private final ProdutoMapper produtoMapper;
     private final LojaRepository lojaRepository;
 
+    @Transactional
     public ProdutoRespostaDTO criarProduto(ProdutoCriacaoDTO dto) {
         return produtoMapper.mapearParaProdutoRespostaDTO(produtoRepository.save(produtoMapper.mapearParaProduto(dto)));
     }
@@ -50,6 +52,18 @@ public class ProdutoService {
         Page<Produto> produtos = produtoRepository.findAll(specs, pageRequest);
 
         return produtos.map(produtoMapper::mapearParaProdutoRespostaDTO);
+    }
+
+    @Transactional
+    public ProdutoRespostaDTO atualizarProduto(UUID id, ProdutoAtualizacaoDTO dto) {
+        Produto produto = produtoRepository.findByIdAndAtivo(id)
+                .orElseThrow(() -> new NaoEncontradoException("Produto nao encontrado"));
+
+        produtoMapper.atualizarProduto(produto, dto);
+
+        Produto produtoAtualizado = produtoRepository.save(produto);
+
+        return produtoMapper.mapearParaProdutoRespostaDTO(produtoAtualizado);
     }
 
     @Transactional
