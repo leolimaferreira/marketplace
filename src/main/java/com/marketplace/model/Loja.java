@@ -38,7 +38,12 @@ public class Loja {
     @JoinColumn(name = "dono_id")
     private Dono dono;
 
-    @OneToMany(mappedBy = "loja", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "loja_produto",
+            joinColumns = @JoinColumn(name = "loja_id"),
+            inverseJoinColumns = @JoinColumn(name = "produto_id")
+    )
     private List<Produto> produtos;
 
     @Column(name = "data_cadastro", nullable = false)
