@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+import static com.marketplace.utils.Constantes.CLIENTE_NAO_ENCONTRADO;
+
 @Service
 @RequiredArgsConstructor
 public class ClienteService {
@@ -44,9 +46,17 @@ public class ClienteService {
     }
 
     @Transactional
+    public ClienteRespostaDTO encontrarClientePorId(UUID clienteId) {
+        Cliente cliente = clienteRepository.findByIdAndAtivo(clienteId)
+                .orElseThrow(() -> new NaoEncontradoException(CLIENTE_NAO_ENCONTRADO));
+
+        return clienteMapper.mapearParaClienteRespostaDTO(cliente);
+    }
+
+    @Transactional
     public ClienteRespostaDTO atualizarCliente(UUID clienteId, ClienteAtualizacaoDTO dto) {
         Cliente cliente = clienteRepository.findByIdAndAtivo(clienteId)
-                .orElseThrow(() -> new NaoEncontradoException("Cliente nao encontrado"));
+                .orElseThrow(() -> new NaoEncontradoException(CLIENTE_NAO_ENCONTRADO));
 
         usuarioValidator.validarEmail(cliente);
 
@@ -58,7 +68,7 @@ public class ClienteService {
     @Transactional
     public void deletarCliente(UUID clienteId) {
         Cliente cliente = clienteRepository.findByIdAndAtivo(clienteId)
-                .orElseThrow(() -> new NaoEncontradoException("Cliente nao encontrado"));
+                .orElseThrow(() -> new NaoEncontradoException(CLIENTE_NAO_ENCONTRADO));
 
         cliente.setAtivo(false);
         clienteRepository.save(cliente);

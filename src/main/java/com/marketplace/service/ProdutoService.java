@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.marketplace.repository.specs.ProdutoSpecs.*;
+import static com.marketplace.utils.Constantes.PRODUTO_NAO_ENCONTRADO;
 
 @Service
 @RequiredArgsConstructor
 public class ProdutoService {
 
-    private static final String PRODUTO_NAO_ENCONTRADO = "Produto nao encontrado";
     private final ProdutoRepository produtoRepository;
     private final ProdutoMapper produtoMapper;
     private final LojaRepository lojaRepository;
@@ -55,6 +55,7 @@ public class ProdutoService {
         return produtos.map(produtoMapper::mapearParaProdutoRespostaDTO);
     }
 
+    @Transactional
     public ProdutoRespostaDTO encontrarProdutoPorId(UUID id) {
         Produto produto = produtoRepository.findByIdAndAtivo(id)
                 .orElseThrow(() -> new NaoEncontradoException(PRODUTO_NAO_ENCONTRADO));
