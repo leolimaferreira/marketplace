@@ -33,6 +33,11 @@ public class ClienteController implements ControllerGenerico {
         return ResponseEntity.ok(clienteService.listarClientes());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteRespostaDTO> encontrarClientePorId(@PathVariable(name = "id") UUID clienteId) {
+        return ResponseEntity.ok(clienteService.encontrarClientePorId(clienteId));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ClienteRespostaDTO> atualizarCliente(@PathVariable(name = "id") UUID clienteId, @RequestBody ClienteAtualizacaoDTO dto) {
         return ResponseEntity.ok(clienteService.atualizarCliente(clienteId, dto));

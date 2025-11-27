@@ -5,12 +5,12 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
 
+import static com.marketplace.utils.Constantes.PRECO_VENDA;
+
 public class ProdutoSpecs {
 
     private ProdutoSpecs() {
     }
-
-    private static final String PRECO_VENDA = "precoVenda";
 
     public static Specification<Produto> ativo() {
         return (root, query, cb) -> cb.equal(root.get("ativo"), true);

@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.marketplace.repository.specs.ProdutoSpecs.*;
+import static com.marketplace.utils.Constantes.PRODUTO_NAO_ENCONTRADO;
 
 @Service
 @RequiredArgsConstructor
@@ -55,9 +56,17 @@ public class ProdutoService {
     }
 
     @Transactional
+    public ProdutoRespostaDTO encontrarProdutoPorId(UUID id) {
+        Produto produto = produtoRepository.findByIdAndAtivo(id)
+                .orElseThrow(() -> new NaoEncontradoException(PRODUTO_NAO_ENCONTRADO));
+
+        return produtoMapper.mapearParaProdutoRespostaDTO(produto);
+    }
+
+    @Transactional
     public ProdutoRespostaDTO atualizarProduto(UUID id, ProdutoAtualizacaoDTO dto) {
         Produto produto = produtoRepository.findByIdAndAtivo(id)
-                .orElseThrow(() -> new NaoEncontradoException("Produto nao encontrado"));
+                .orElseThrow(() -> new NaoEncontradoException(PRODUTO_NAO_ENCONTRADO));
 
         produtoMapper.atualizarProduto(produto, dto);
 
@@ -69,7 +78,7 @@ public class ProdutoService {
     @Transactional
     public void deletarProduto(UUID id) {
         Produto produto = produtoRepository.findByIdAndAtivo(id)
-                .orElseThrow(() -> new NaoEncontradoException("Produto nao encontrado"));
+                .orElseThrow(() -> new NaoEncontradoException(PRODUTO_NAO_ENCONTRADO));
 
         List<Loja> lojas = lojaRepository.findLojasByProduto(produto);
 
