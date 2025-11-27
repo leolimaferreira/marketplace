@@ -6,12 +6,11 @@ import com.marketplace.dto.produto.ProdutoRespostaDTO;
 import com.marketplace.service.ProdutoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.net.URI;
 
 @RestController
@@ -26,5 +25,22 @@ public class ProdutoController implements ControllerGenerico {
         ProdutoRespostaDTO produtoRespostaDTO = produtoService.criarProduto(dto);
         URI location = gerarHeaderLocation(produtoRespostaDTO.id());
         return ResponseEntity.created(location).body(produtoRespostaDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ProdutoRespostaDTO>> listarProdutos(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) BigDecimal precoMin,
+            @RequestParam(required = false) BigDecimal precoMax,
+            @RequestParam(defaultValue = "0") Integer pagina,
+            @RequestParam(defaultValue = "10") Integer tamanho
+    ) {
+        return ResponseEntity.ok(produtoService.listarProdutos(
+                nome,
+                precoMin,
+                precoMax,
+                pagina,
+                tamanho
+        ));
     }
 }
