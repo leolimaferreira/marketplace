@@ -40,10 +40,6 @@ public class Produto {
     @Column(name = "imagem", columnDefinition = "TEXT")
     private String imagem;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "loja_id", nullable = false)
-    private Loja loja;
-
     @Column(name = "data_cadastro", nullable = false)
     private LocalDateTime dataCadastro;
 
