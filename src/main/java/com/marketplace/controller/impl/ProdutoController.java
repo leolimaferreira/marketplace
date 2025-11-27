@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/produtos")
@@ -42,5 +43,11 @@ public class ProdutoController implements ControllerGenerico {
                 pagina,
                 tamanho
         ));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarProduto(@PathVariable(name = "id") UUID id) {
+        produtoService.deletarProduto(id);
+        return ResponseEntity.noContent().build();
     }
 }

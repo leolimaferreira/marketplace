@@ -12,6 +12,10 @@ public class ProdutoSpecs {
 
     private static final String PRECO_VENDA = "precoVenda";
 
+    public static Specification<Produto> ativo() {
+        return (root, query, cb) -> cb.equal(root.get("ativo"), true);
+    }
+
     public static Specification<Produto> nomeLike(String nome) {
         return (root, query, cb) -> cb.like( cb.upper(root.get("nome")), "%" + nome.toUpperCase() + "%");
     }
