@@ -46,6 +46,11 @@ public class ProdutoController implements ControllerGenerico {
         ));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ProdutoRespostaDTO> encontrarProdutoPorId(@PathVariable(name = "id") UUID id) {
+        return ResponseEntity.ok(produtoService.encontrarProdutoPorId(id));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoRespostaDTO> atualizarProduto(
             @PathVariable(name = "id") UUID id,
