@@ -6,7 +6,7 @@ import com.marketplace.dto.loja.LojaRespostaDTO;
 import com.marketplace.mapper.LojaMapper;
 import com.marketplace.model.Loja;
 import com.marketplace.repository.LojaRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -9,7 +9,7 @@ import com.marketplace.mapper.ClienteMapper;
 import com.marketplace.model.Cliente;
 import com.marketplace.repository.ClienteRepository;
 import com.marketplace.validator.UsuarioValidator;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
