@@ -3,6 +3,7 @@ package com.marketplace.service;
 import com.marketplace.dto.pedido.PedidoCriacaoDTO;
 import com.marketplace.dto.pedido.PedidoRespostaDTO;
 import com.marketplace.mapper.PedidoMapper;
+import com.marketplace.model.ItemPedido;
 import com.marketplace.model.Pedido;
 import com.marketplace.repository.PedidoRepository;
 import jakarta.transaction.Transactional;
@@ -21,5 +22,12 @@ public class PedidoService {
         Pedido pedido = pedidoMapper.mapearParaPedido(dto);
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
         return pedidoMapper.mapearParaPedidoRespostaDTO(pedidoSalvo);
+    }
+
+    @Transactional
+    public void adicionarItem(ItemPedido itemPedido) {
+        Pedido pedido = itemPedido.getPedido();
+        pedido.getItens().add(itemPedido);
+        pedidoRepository.save(pedido);
     }
 }
