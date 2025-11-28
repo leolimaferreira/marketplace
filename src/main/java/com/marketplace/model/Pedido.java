@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,9 @@ public class Pedido {
 
     @OneToOne(mappedBy = "pedido")
     private Pagamento pagamento;
+
+    @Column(name = "valor_total_pedido", precision = 10, scale = 2, nullable = false)
+    private BigDecimal valorTotalPedido = BigDecimal.ZERO;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)

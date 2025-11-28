@@ -6,9 +6,13 @@ import com.marketplace.mapper.PedidoMapper;
 import com.marketplace.model.ItemPedido;
 import com.marketplace.model.Pedido;
 import com.marketplace.repository.PedidoRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +32,19 @@ public class PedidoService {
     public void adicionarItem(ItemPedido itemPedido) {
         Pedido pedido = itemPedido.getPedido();
         pedido.getItens().add(itemPedido);
+
+        BigDecimal novoValorTotalPedido = pedido.getValorTotalPedido().add(itemPedido.getValorTotal());
+        pedido.setValorTotalPedido(novoValorTotalPedido);
+
         pedidoRepository.save(pedido);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PedidoRespostaDTO> listarPedidosCliente(UUID clienteId) {
+        return pedidoRepository
+                .findAllByClienteId(clienteId)
+                .stream()
+                .map(pedidoMapper::mapearParaPedidoRespostaDTO)
+                .toList();
     }
 }
