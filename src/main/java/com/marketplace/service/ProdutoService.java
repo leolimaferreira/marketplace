@@ -9,7 +9,7 @@ import com.marketplace.model.Loja;
 import com.marketplace.model.Produto;
 import com.marketplace.repository.LojaRepository;
 import com.marketplace.repository.ProdutoRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

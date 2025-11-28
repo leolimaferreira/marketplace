@@ -5,7 +5,7 @@ import com.marketplace.dto.pagamento.PagamentoRespostaDTO;
 import com.marketplace.mapper.PagamentoMapper;
 import com.marketplace.model.Pagamento;
 import com.marketplace.repository.PagamentoRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
