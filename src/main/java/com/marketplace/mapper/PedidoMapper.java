@@ -17,6 +17,8 @@ public class PedidoMapper {
 
     private final ClienteRepository clienteRepository;
     private final ClienteMapper clienteMapper;
+    private final PagamentoMapper pagamentoMapper;
+    private final ItemPedidoMapper itemPedidoMapper;
 
     public Pedido mapearParaPedido(PedidoCriacaoDTO dto) {
         Cliente cliente = clienteRepository.findByIdAndAtivo(dto.clienteId())
@@ -30,8 +32,9 @@ public class PedidoMapper {
         return new PedidoRespostaDTO(
                 pedido.getId(),
                 clienteMapper.mapearParaClienteRespostaDTO(pedido.getCliente()),
-                null,
-                null,
+                pedido.getItens().stream().map(itemPedidoMapper::mapearParaItemPedidoResposta).toList(),
+                pagamentoMapper.mapearParaPagamentoResposta(pedido.getPagamento()),
+                pedido.getValorTotalPedido(),
                 pedido.getStatus(),
                 pedido.getDataCriacao(),
                 pedido.getDataAtualizacao()
