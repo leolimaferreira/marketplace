@@ -37,7 +37,7 @@ public class PagamentoMapper {
     }
 
     public PagamentoRespostaDTO mapearParaPagamentoResposta(Pagamento pagamento) {
-        return new PagamentoRespostaDTO(
+        return pagamento == null ? null : new PagamentoRespostaDTO(
                 pagamento.getId(),
                 pagamento.getFormaPagamento(),
                 pagamento.getStatus(),
