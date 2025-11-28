@@ -22,7 +22,7 @@ public class Pagamento {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private PagamentoStatus status;
+    private PagamentoStatus status = PagamentoStatus.PENDENTE;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "forma_pagamento", nullable = false)
