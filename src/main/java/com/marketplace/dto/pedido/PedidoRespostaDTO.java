@@ -5,6 +5,7 @@ import com.marketplace.dto.pagamento.PagamentoRespostaDTO;
 import com.marketplace.dto.usuario.cliente.ClienteRespostaDTO;
 import com.marketplace.model.enums.PedidoStatus;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +15,7 @@ public record PedidoRespostaDTO(
         ClienteRespostaDTO cliente,
         List<ItemPedidoRespostaDTO> itens,
         PagamentoRespostaDTO pagamento,
+        BigDecimal valorTotalPedido,
         PedidoStatus status,
         LocalDateTime criadoEm,
         LocalDateTime atualizadoEm

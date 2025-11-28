@@ -7,12 +7,11 @@ import com.marketplace.service.PedidoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -26,5 +25,10 @@ public class PedidoController implements ControllerGenerico {
         PedidoRespostaDTO pedidoRespostaDTO = pedidoService.criarPedido(dto);
         URI location = gerarHeaderLocation(pedidoRespostaDTO.id());
         return ResponseEntity.created(location).body(pedidoRespostaDTO);
+    }
+
+    @GetMapping("/cliente/{clienteId}")
+    public ResponseEntity<List<PedidoRespostaDTO>> listarPedidosCliente(@PathVariable(name = "clienteId") UUID clienteId) {
+        return ResponseEntity.ok(pedidoService.listarPedidosCliente(clienteId));
     }
 }
