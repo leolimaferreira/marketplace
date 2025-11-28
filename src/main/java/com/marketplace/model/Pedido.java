@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,14 +25,14 @@ public class Pedido {
     private Cliente cliente;
 
     @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
-    private List<ItemPedido> itens;
+    private List<ItemPedido> itens = new ArrayList<>();
 
     @OneToOne(mappedBy = "pedido")
     private Pagamento pagamento;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private PedidoStatus status;
+    private PedidoStatus status = PedidoStatus.PENDENTE;
 
     @Column(name = "data_criacao", nullable = false)
     private LocalDateTime dataCriacao;
