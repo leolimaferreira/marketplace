@@ -31,4 +31,9 @@ public class PedidoController implements ControllerGenerico {
     public ResponseEntity<List<PedidoRespostaDTO>> listarPedidosCliente(@PathVariable(name = "clienteId") UUID clienteId) {
         return ResponseEntity.ok(pedidoService.listarPedidosCliente(clienteId));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PedidoRespostaDTO> encontrarPedidoPorId(@PathVariable UUID id) {
+        return ResponseEntity.ok(pedidoService.encontrarProdutoPorId(id));
+    }
 }

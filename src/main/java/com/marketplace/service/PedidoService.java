@@ -2,6 +2,7 @@ package com.marketplace.service;
 
 import com.marketplace.dto.pedido.PedidoCriacaoDTO;
 import com.marketplace.dto.pedido.PedidoRespostaDTO;
+import com.marketplace.exception.NaoEncontradoException;
 import com.marketplace.mapper.PedidoMapper;
 import com.marketplace.model.ItemPedido;
 import com.marketplace.model.Pedido;
@@ -46,5 +47,12 @@ public class PedidoService {
                 .stream()
                 .map(pedidoMapper::mapearParaPedidoRespostaDTO)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public PedidoRespostaDTO encontrarProdutoPorId(UUID id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new NaoEncontradoException("Pedido não encontrado"));
+        return pedidoMapper.mapearParaPedidoRespostaDTO(pedido);
     }
 }
