@@ -11,7 +11,7 @@ public record PagamentoRespostaDTO(
         UUID id,
         FormaPagamento formaPagamento,
         PagamentoStatus status,
-        BigDecimal valor,
+        BigDecimal valorPago,
         LocalDateTime criadoEm,
         LocalDateTime atualizadoEm
 ) {
