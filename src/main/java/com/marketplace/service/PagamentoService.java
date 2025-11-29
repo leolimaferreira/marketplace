@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 @RequiredArgsConstructor
 public class PagamentoService {
@@ -19,6 +21,12 @@ public class PagamentoService {
     @Transactional
     public PagamentoRespostaDTO criarPagamento(PagamentoCriacaoDTO dto) {
         Pagamento pagamento = pagamentoMapper.mapearParaPagamento(dto);
+
+        if (dto.formaPagamento().equals("PIX") || dto.formaPagamento().equals("BOLETO")) {
+            BigDecimal desconto = pagamento.getValor().multiply(new BigDecimal("0.10"));
+            pagamento.setValor(pagamento.getValor().subtract(desconto));
+        }
+
         Pagamento pagamentoSalvo = pagamentoRepository.save(pagamento);
         return pagamentoMapper.mapearParaPagamentoResposta(pagamentoSalvo);
     }
