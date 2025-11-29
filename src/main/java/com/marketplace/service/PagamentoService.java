@@ -1,7 +1,9 @@
 package com.marketplace.service;
 
+import com.marketplace.dto.pagamento.PagamentoAtualizacaoDTO;
 import com.marketplace.dto.pagamento.PagamentoCriacaoDTO;
 import com.marketplace.dto.pagamento.PagamentoRespostaDTO;
+import com.marketplace.exception.NaoEncontradoException;
 import com.marketplace.mapper.PagamentoMapper;
 import com.marketplace.model.Pagamento;
 import com.marketplace.repository.PagamentoRepository;
@@ -10,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,5 +32,16 @@ public class PagamentoService {
 
         Pagamento pagamentoSalvo = pagamentoRepository.save(pagamento);
         return pagamentoMapper.mapearParaPagamentoResposta(pagamentoSalvo);
+    }
+
+    @Transactional
+    public PagamentoRespostaDTO atualizarStatusPagamento(UUID id, PagamentoAtualizacaoDTO dto) {
+        Pagamento pagamento = pagamentoRepository.findById(id)
+                .orElseThrow(() -> new NaoEncontradoException("Pagamento não encontrado"));
+
+        pagamentoMapper.atualizarPagamento(pagamento, dto);
+
+        Pagamento pagamentoAtualizado = pagamentoRepository.save(pagamento);
+        return pagamentoMapper.mapearParaPagamentoResposta(pagamentoAtualizado);
     }
 }

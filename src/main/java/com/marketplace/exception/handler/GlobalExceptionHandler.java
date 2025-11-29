@@ -2,10 +2,7 @@ package com.marketplace.exception.handler;
 
 import com.marketplace.dto.error.ErroCampo;
 import com.marketplace.dto.error.RespostaErro;
-import com.marketplace.exception.CampoInvalidoException;
-import com.marketplace.exception.ConflitoException;
-import com.marketplace.exception.NaoEncontradoException;
-import com.marketplace.exception.QuantidadeInsuficienteException;
+import com.marketplace.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,6 +40,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(QuantidadeInsuficienteException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public RespostaErro handleQuantidadeInsuficienteException(QuantidadeInsuficienteException e) {
+        return new RespostaErro(
+                HttpStatus.BAD_REQUEST.value(),
+                e.getMessage(),
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(AtualizacaoStatusInvalidaException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RespostaErro handleAtualizacaoStatusInvalidaException(AtualizacaoStatusInvalidaException e) {
         return new RespostaErro(
                 HttpStatus.BAD_REQUEST.value(),
                 e.getMessage(),
