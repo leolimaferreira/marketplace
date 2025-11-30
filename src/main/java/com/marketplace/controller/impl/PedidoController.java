@@ -1,6 +1,7 @@
 package com.marketplace.controller.impl;
 
 import com.marketplace.controller.ControllerGenerico;
+import com.marketplace.dto.pedido.PedidoAtualizacaoDTO;
 import com.marketplace.dto.pedido.PedidoCriacaoDTO;
 import com.marketplace.dto.pedido.PedidoRespostaDTO;
 import com.marketplace.service.PedidoService;
@@ -35,5 +36,13 @@ public class PedidoController implements ControllerGenerico {
     @GetMapping("/{id}")
     public ResponseEntity<PedidoRespostaDTO> encontrarPedidoPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(pedidoService.encontrarProdutoPorId(id));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PedidoRespostaDTO> atualizarStatusPedido(
+            @PathVariable(name = "id") UUID id,
+            @RequestBody @Valid PedidoAtualizacaoDTO dto
+    ) {
+        return ResponseEntity.ok(pedidoService.atualizarStatusPedido(id, dto));
     }
 }
