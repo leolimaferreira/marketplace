@@ -33,4 +33,9 @@ public class PagamentoController implements ControllerGenerico {
             @RequestBody @Valid PagamentoAtualizacaoDTO dto) {
         return ResponseEntity.ok(pagamentoService.atualizarStatusPagamento(id, dto));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PagamentoRespostaDTO> encontrarPagamentoPorId(@PathVariable UUID id) {
+        return ResponseEntity.ok(pagamentoService.encontrarPagamentoPorId(id));
+    }
 }

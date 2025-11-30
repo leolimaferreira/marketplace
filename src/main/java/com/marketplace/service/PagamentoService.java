@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import static com.marketplace.utils.Constantes.PAGAMENTO_NAO_ENCONTRADO;
+
 @Service
 @RequiredArgsConstructor
 public class PagamentoService {
@@ -37,11 +39,20 @@ public class PagamentoService {
     @Transactional
     public PagamentoRespostaDTO atualizarStatusPagamento(UUID id, PagamentoAtualizacaoDTO dto) {
         Pagamento pagamento = pagamentoRepository.findById(id)
-                .orElseThrow(() -> new NaoEncontradoException("Pagamento não encontrado"));
+                .orElseThrow(() -> new NaoEncontradoException(PAGAMENTO_NAO_ENCONTRADO));
 
         pagamentoMapper.atualizarPagamento(pagamento, dto);
 
         Pagamento pagamentoAtualizado = pagamentoRepository.save(pagamento);
         return pagamentoMapper.mapearParaPagamentoResposta(pagamentoAtualizado);
+    }
+
+    @Transactional(readOnly = true)
+    public PagamentoRespostaDTO encontrarPagamentoPorId(UUID id) {
+        return pagamentoMapper
+                .mapearParaPagamentoResposta(
+                        pagamentoRepository.findById(id)
+                                .orElseThrow(() -> new NaoEncontradoException(PAGAMENTO_NAO_ENCONTRADO))
+                );
     }
 }
