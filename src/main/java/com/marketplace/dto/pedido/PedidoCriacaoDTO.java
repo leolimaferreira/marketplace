@@ -6,6 +6,8 @@ import java.util.UUID;
 
 public record PedidoCriacaoDTO(
         @NotNull
-        UUID clienteId
+        UUID clienteId,
+        @NotNull
+        UUID lojaId
 ) {
 }

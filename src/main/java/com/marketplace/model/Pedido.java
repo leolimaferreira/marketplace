@@ -25,6 +25,10 @@ public class Pedido {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "loja_id")
+    private Loja loja;
+
     @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
     private List<ItemPedido> itens = new ArrayList<>();
 
