@@ -1,15 +1,17 @@
 package com.marketplace.service;
 
+import com.marketplace.dto.pedido.PedidoAtualizacaoDTO;
 import com.marketplace.dto.pedido.PedidoCriacaoDTO;
 import com.marketplace.dto.pedido.PedidoRespostaDTO;
 import com.marketplace.exception.NaoEncontradoException;
 import com.marketplace.mapper.PedidoMapper;
 import com.marketplace.model.ItemPedido;
 import com.marketplace.model.Pedido;
+import com.marketplace.model.enums.PedidoStatus;
 import com.marketplace.repository.PedidoRepository;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PedidoService {
 
+    private static final String PEDIDO_NAO_ENCONTRADO = "Pedido não encontrado";
     private final PedidoRepository pedidoRepository;
     private final PedidoMapper pedidoMapper;
 
@@ -52,7 +55,18 @@ public class PedidoService {
     @Transactional(readOnly = true)
     public PedidoRespostaDTO encontrarProdutoPorId(UUID id) {
         Pedido pedido = pedidoRepository.findById(id)
-                .orElseThrow(() -> new NaoEncontradoException("Pedido não encontrado"));
+                .orElseThrow(() -> new NaoEncontradoException(PEDIDO_NAO_ENCONTRADO));
         return pedidoMapper.mapearParaPedidoRespostaDTO(pedido);
+    }
+
+    @Transactional
+    public PedidoRespostaDTO atualizarStatusPedido(UUID id, PedidoAtualizacaoDTO dto) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new NaoEncontradoException(PEDIDO_NAO_ENCONTRADO));
+        PedidoStatus novoStatus = PedidoStatus.valueOf(dto.status());
+
+        pedidoMapper.atualizarPedido(pedido, novoStatus);
+
+        return pedidoMapper.mapearParaPedidoRespostaDTO(pedidoRepository.save(pedido));
     }
 }
