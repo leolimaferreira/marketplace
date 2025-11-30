@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class LojaService {
@@ -32,5 +34,19 @@ public class LojaService {
         donoService.vincularDonoALoja(dto.emailDono(), loja);
         Loja lojaSalva = lojaRepository.save(loja);
         return lojaMapper.mapearParaLojaResposta(lojaSalva);
+    }
+
+    @Transactional(readOnly = true)
+    public List<LojaRespostaDTO> listarLojasAtivas() {
+        return lojaRepository.findAllAtivo().stream()
+                .map(lojaMapper::mapearParaLojaResposta)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<LojaRespostaDTO> listarTodasLojas() {
+        return lojaRepository.findAll().stream()
+                .map(lojaMapper::mapearParaLojaResposta)
+                .toList();
     }
 }

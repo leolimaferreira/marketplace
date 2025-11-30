@@ -8,12 +8,10 @@ import com.marketplace.service.LojaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/lojas")
@@ -36,5 +34,15 @@ public class LojaController implements ControllerGenerico {
         LojaRespostaDTO lojaRespostaDTO = lojaService.criarLojaComDonoExistente(dto);
         URI location = gerarHeaderLocation(lojaRespostaDTO.id());
         return ResponseEntity.created(location).body(lojaRespostaDTO);
+    }
+
+    @GetMapping("/ativas")
+    public ResponseEntity<List<LojaRespostaDTO>> listarLojasAtivas() {
+        return ResponseEntity.ok(lojaService.listarLojasAtivas());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<LojaRespostaDTO>> listarTodasLojas() {
+        return ResponseEntity.ok(lojaService.listarTodasLojas());
     }
 }

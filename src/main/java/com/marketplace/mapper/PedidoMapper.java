@@ -32,7 +32,7 @@ public class PedidoMapper {
         Cliente cliente = clienteRepository.findByIdAndAtivo(dto.clienteId())
                 .orElseThrow(() -> new NaoEncontradoException(CLIENTE_NAO_ENCONTRADO));
 
-        Loja loja = lojaRepository.findById(dto.lojaId())
+        Loja loja = lojaRepository.findByIdAndAtivo(dto.lojaId())
                 .orElseThrow(() -> new NaoEncontradoException(LOJA_NAO_ENCONTRADA));
 
         Pedido pedido = new Pedido();
