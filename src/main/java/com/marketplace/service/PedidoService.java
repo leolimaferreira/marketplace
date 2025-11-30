@@ -17,11 +17,12 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import static com.marketplace.utils.Constantes.PEDIDO_NAO_ENCONTRADO;
+
 @Service
 @RequiredArgsConstructor
 public class PedidoService {
 
-    private static final String PEDIDO_NAO_ENCONTRADO = "Pedido não encontrado";
     private final PedidoRepository pedidoRepository;
     private final PedidoMapper pedidoMapper;
 
