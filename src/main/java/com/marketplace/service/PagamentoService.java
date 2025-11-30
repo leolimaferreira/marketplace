@@ -6,14 +6,17 @@ import com.marketplace.dto.pagamento.PagamentoRespostaDTO;
 import com.marketplace.exception.NaoEncontradoException;
 import com.marketplace.mapper.PagamentoMapper;
 import com.marketplace.model.Pagamento;
+import com.marketplace.repository.ClienteRepository;
 import com.marketplace.repository.PagamentoRepository;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
+import static com.marketplace.utils.Constantes.CLIENTE_NAO_ENCONTRADO;
 import static com.marketplace.utils.Constantes.PAGAMENTO_NAO_ENCONTRADO;
 
 @Service
@@ -22,6 +25,7 @@ public class PagamentoService {
 
     private final PagamentoRepository pagamentoRepository;
     private final PagamentoMapper pagamentoMapper;
+    private final ClienteRepository clienteRepository;
 
     @Transactional
     public PagamentoRespostaDTO criarPagamento(PagamentoCriacaoDTO dto) {
@@ -54,5 +58,15 @@ public class PagamentoService {
                         pagamentoRepository.findById(id)
                                 .orElseThrow(() -> new NaoEncontradoException(PAGAMENTO_NAO_ENCONTRADO))
                 );
+    }
+
+    @Transactional(readOnly = true)
+    public List<PagamentoRespostaDTO> listarPagamentosCliente(UUID clienteId) {
+        clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new NaoEncontradoException(CLIENTE_NAO_ENCONTRADO));
+
+        return pagamentoRepository.findAllByClienteId(clienteId).stream()
+                .map(pagamentoMapper::mapearParaPagamentoResposta)
+                .toList();
     }
 }

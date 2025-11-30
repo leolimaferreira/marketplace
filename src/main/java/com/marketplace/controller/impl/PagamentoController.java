@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -37,5 +38,10 @@ public class PagamentoController implements ControllerGenerico {
     @GetMapping("/{id}")
     public ResponseEntity<PagamentoRespostaDTO> encontrarPagamentoPorId(@PathVariable UUID id) {
         return ResponseEntity.ok(pagamentoService.encontrarPagamentoPorId(id));
+    }
+
+    @GetMapping("/cliente/{clienteId}")
+    public ResponseEntity<List<PagamentoRespostaDTO>> listarPagamentosCliente(@PathVariable(name = "clienteId") UUID clienteId) {
+        return ResponseEntity.ok(pagamentoService.listarPagamentosCliente(clienteId));
     }
 }
