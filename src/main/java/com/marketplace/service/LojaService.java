@@ -8,6 +8,7 @@ import com.marketplace.exception.NaoEncontradoException;
 import com.marketplace.mapper.LojaMapper;
 import com.marketplace.model.Loja;
 import com.marketplace.repository.LojaRepository;
+import com.marketplace.validator.LojaValidator;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,12 +25,16 @@ public class LojaService {
     private final DonoService donoService;
     private final LojaRepository lojaRepository;
     private final LojaMapper lojaMapper;
+    private final LojaValidator lojaValidator;
 
     @Transactional
     public LojaRespostaDTO criarLojaComDonoNovo(LojaComDonoNovoDTO dto) {
         Loja loja = lojaMapper.mapearParaLoja(dto);
+        lojaValidator.validarCnpj(loja);
+
         donoService.vincularDonoALoja(dto.dono(), loja);
         Loja lojaSalva = lojaRepository.save(loja);
+
         return lojaMapper.mapearParaLojaResposta(lojaSalva);
     }
 
