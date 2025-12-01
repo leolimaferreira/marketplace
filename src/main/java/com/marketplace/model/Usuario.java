@@ -1,5 +1,6 @@
 package com.marketplace.model;
 
+import com.marketplace.model.enums.Cargo;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,6 +48,9 @@ public class Usuario {
     @Lob
     @Column(name = "imagem", columnDefinition = "TEXT")
     private String imagem;
+
+    @Enumerated(EnumType.STRING)
+    private Cargo cargo = Cargo.CLIENTE;
 
     @Column(name = "data_cadastro", nullable = false)
     private LocalDateTime dataCadastro;
