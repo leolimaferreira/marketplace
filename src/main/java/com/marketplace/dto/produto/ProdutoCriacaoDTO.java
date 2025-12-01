@@ -4,6 +4,7 @@ import com.marketplace.annotation.PrecoVendaValido;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @PrecoVendaValido
 public record ProdutoCriacaoDTO(
@@ -22,6 +23,8 @@ public record ProdutoCriacaoDTO(
         @NotNull
         @Min(value = 1, message = "Quantidade deve ser maior ou igual a 1")
         Integer quantidade,
-        String imagem
+        String imagem,
+        @NotNull
+        UUID lojaId
 ) {
 }

@@ -36,6 +36,11 @@ public class PedidoService {
     @Transactional
     public void adicionarItem(ItemPedido itemPedido) {
         Pedido pedido = itemPedido.getPedido();
+
+        if (!pedido.getLoja().getProdutos().contains(itemPedido.getProduto())) {
+            throw new NaoEncontradoException("A loja desse pedido não possui esse produto");
+        }
+
         pedido.getItens().add(itemPedido);
 
         BigDecimal novoValorTotalPedido = pedido.getValorTotalPedido().add(itemPedido.getValorTotal());

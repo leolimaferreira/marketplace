@@ -1,8 +1,10 @@
 package com.marketplace.service;
 
+import com.marketplace.dto.loja.LojaAtualizacaoDTO;
 import com.marketplace.dto.loja.LojaComDonoExistenteDTO;
 import com.marketplace.dto.loja.LojaComDonoNovoDTO;
 import com.marketplace.dto.loja.LojaRespostaDTO;
+import com.marketplace.exception.NaoEncontradoException;
 import com.marketplace.mapper.LojaMapper;
 import com.marketplace.model.Loja;
 import com.marketplace.repository.LojaRepository;
@@ -11,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
+
+import static com.marketplace.utils.Constantes.LOJA_NAO_ENCONTRADA;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +53,15 @@ public class LojaService {
         return lojaRepository.findAll().stream()
                 .map(lojaMapper::mapearParaLojaResposta)
                 .toList();
+    }
+
+    @Transactional
+    public LojaRespostaDTO atualizarLoja(UUID id, LojaAtualizacaoDTO dto) {
+        Loja loja = lojaRepository.findByIdAndAtivo(id)
+                .orElseThrow(() -> new NaoEncontradoException(LOJA_NAO_ENCONTRADA));
+
+        lojaMapper.atualizarLoja(loja, dto);
+
+        return lojaMapper.mapearParaLojaResposta(lojaRepository.save(loja));
     }
 }

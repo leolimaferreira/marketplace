@@ -1,6 +1,7 @@
 package com.marketplace.controller.impl;
 
 import com.marketplace.controller.ControllerGenerico;
+import com.marketplace.dto.loja.LojaAtualizacaoDTO;
 import com.marketplace.dto.loja.LojaComDonoExistenteDTO;
 import com.marketplace.dto.loja.LojaComDonoNovoDTO;
 import com.marketplace.dto.loja.LojaRespostaDTO;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/lojas")
@@ -44,5 +46,13 @@ public class LojaController implements ControllerGenerico {
     @GetMapping
     public ResponseEntity<List<LojaRespostaDTO>> listarTodasLojas() {
         return ResponseEntity.ok(lojaService.listarTodasLojas());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<LojaRespostaDTO> atualizarLoja(
+            @PathVariable("id") UUID id,
+            @RequestBody @Valid LojaAtualizacaoDTO dto
+    ) {
+        return ResponseEntity.ok(lojaService.atualizarLoja(id, dto));
     }
 }
