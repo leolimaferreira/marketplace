@@ -18,4 +18,7 @@ public interface LojaRepository extends JpaRepository<Loja, UUID> {
 
     @Query("SELECT l FROM Loja l WHERE l.ativo = true")
     List<Loja> findAllAtivo();
+
+    @Query("SELECT l FROM Loja l WHERE l.cnpj = :cnpj AND l.ativo = true")
+    Optional<Loja> findByCnpjAndAtivo(String cnpj);
 }
