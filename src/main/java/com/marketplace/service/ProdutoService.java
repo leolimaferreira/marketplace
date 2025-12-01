@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.marketplace.repository.specs.ProdutoSpecs.*;
+import static com.marketplace.utils.Constantes.LOJA_NAO_ENCONTRADA;
 import static com.marketplace.utils.Constantes.PRODUTO_NAO_ENCONTRADO;
 
 @Service
@@ -33,7 +34,12 @@ public class ProdutoService {
 
     @Transactional
     public ProdutoRespostaDTO criarProduto(ProdutoCriacaoDTO dto) {
-        return produtoMapper.mapearParaProdutoRespostaDTO(produtoRepository.save(produtoMapper.mapearParaProduto(dto)));
+        Loja loja = lojaRepository.findByIdAndAtivo(dto.lojaId())
+                .orElseThrow(() -> new NaoEncontradoException(LOJA_NAO_ENCONTRADA));
+
+        Produto produtoSalvo = produtoRepository.save(produtoMapper.mapearParaProduto(dto));
+        loja.getProdutos().add(produtoSalvo);
+        return produtoMapper.mapearParaProdutoRespostaDTO(produtoSalvo);
     }
 
     public Page<ProdutoRespostaDTO> listarProdutos(String nome, BigDecimal precoMin, BigDecimal precoMax, Integer pagina, Integer tamanho) {
