@@ -8,6 +8,7 @@ import com.marketplace.model.Loja;
 import com.marketplace.repository.DonoRepository;
 import com.marketplace.validator.UsuarioValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +18,7 @@ public class DonoService {
     private final DonoRepository donoRepository;
     private final DonoMapper donoMapper;
     private final UsuarioValidator usuarioValidator;
+    private final PasswordEncoder passwordEncoder;
 
     public void vincularDonoALoja(Object dono, Loja loja) {
         if (dono instanceof String string) {
@@ -30,6 +32,7 @@ public class DonoService {
         } else {
             DonoCriacaoDTO donoDTO = (DonoCriacaoDTO) dono;
             Dono novoDono = donoMapper.mapearParaDono(donoDTO);
+            novoDono.setSenha(passwordEncoder.encode(novoDono.getSenha()));
             usuarioValidator.validarEmail(novoDono);
             donoRepository.save(novoDono);
             loja.setDono(novoDono);

@@ -1,5 +1,6 @@
 package com.marketplace.dto.usuario.dono;
 
+import com.marketplace.annotation.SenhaForte;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ public record DonoCriacaoDTO(
 
         @NotBlank(message = "Senha é obrigatória")
         @Size(min = 8, max = 20, message = "Senha deve ter no mínimo 8 caracteres e no máximo 20 caracteres")
+        @SenhaForte
         String senha,
 
         @NotBlank(message = "CPF é obrigatório")

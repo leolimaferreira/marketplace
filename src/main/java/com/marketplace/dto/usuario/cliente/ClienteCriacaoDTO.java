@@ -1,5 +1,6 @@
 package com.marketplace.dto.usuario.cliente;
 
+import com.marketplace.annotation.SenhaForte;
 import com.marketplace.dto.endereco.EnderecoCriacaoDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -17,6 +18,7 @@ public record ClienteCriacaoDTO(
 
         @NotBlank(message = "Senha é obrigatória")
         @Size(min = 8, max = 20, message = "Senha deve ter no mínimo 8 caracteres e no máximo 20 caracteres")
+        @SenhaForte
         String senha,
 
         @NotBlank(message = "CPF é obrigatório")

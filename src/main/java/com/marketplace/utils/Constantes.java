@@ -9,4 +9,10 @@ public class Constantes {
     public static final String PEDIDO_NAO_ENCONTRADO = "Pedido não encontrado";
     public static final String LOJA_NAO_ENCONTRADA = "Loja não encontrada";
     public static final String DONO_NAO_ENCONTRADO = "Dono não encontrado";
+    public static final String USUARIO_NAO_ENCONTRADO = "Usuário não encontrado";
+    public static final String CLIENTE = "CLIENTE";
+    public static final String VENDEDOR = "VENDEDOR";
+    public static final String ADMIN = "ADMIN";
+    public static final String CLIENTES_URL = "/clientes/**";
+    public static final String PRODUTOS_URL = "/produtos/**";
 }
