@@ -6,6 +6,7 @@ import com.marketplace.mapper.DonoMapper;
 import com.marketplace.model.Dono;
 import com.marketplace.model.Loja;
 import com.marketplace.repository.DonoRepository;
+import com.marketplace.validator.UsuarioValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ public class DonoService {
 
     private final DonoRepository donoRepository;
     private final DonoMapper donoMapper;
+    private final UsuarioValidator usuarioValidator;
 
     public void vincularDonoALoja(Object dono, Loja loja) {
         if (dono instanceof String string) {
@@ -28,6 +30,7 @@ public class DonoService {
         } else {
             DonoCriacaoDTO donoDTO = (DonoCriacaoDTO) dono;
             Dono novoDono = donoMapper.mapearParaDono(donoDTO);
+            usuarioValidator.validarEmail(novoDono);
             donoRepository.save(novoDono);
             loja.setDono(novoDono);
         }
