@@ -3,7 +3,9 @@ package com.marketplace.exception.handler;
 import com.marketplace.dto.error.ErroCampo;
 import com.marketplace.dto.error.RespostaErro;
 import com.marketplace.exception.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.List;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NaoEncontradoException.class)
@@ -63,5 +66,19 @@ public class GlobalExceptionHandler {
         List<FieldError> fieldErrors = e.getFieldErrors();
         List<ErroCampo> errosList = fieldErrors.stream().map(fe -> new ErroCampo(fe.getField(), fe.getDefaultMessage())).toList();
         return new RespostaErro(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Erro de validação", errosList);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public RespostaErro handleBadCredentialsException(BadCredentialsException e) {
+        log.error("Autenticação falhou: {}", e.getMessage());
+        return new RespostaErro(HttpStatus.UNAUTHORIZED.value(), e.getMessage(), List.of());
+    }
+
+    @ExceptionHandler(NaoAutorizadoException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public RespostaErro handleNaoAutorizadoException(NaoAutorizadoException e) {
+        log.error("Erro nas authorities do usuário: {}", e.getMessage());
+        return new RespostaErro(HttpStatus.UNAUTHORIZED.value(), e.getMessage(), List.of());
     }
 }
