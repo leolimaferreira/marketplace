@@ -81,4 +81,18 @@ public class GlobalExceptionHandler {
         log.error("Erro nas authorities do usuário: {}", e.getMessage());
         return new RespostaErro(HttpStatus.UNAUTHORIZED.value(), e.getMessage(), List.of());
     }
+
+    @ExceptionHandler(TokenRecuperacaoExpiradoException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public RespostaErro handleTokenRecuperacaoExpiradoException(TokenRecuperacaoExpiradoException e) {
+        log.error("Erro na validação do token: {}", e.getMessage());
+        return new RespostaErro(HttpStatus.UNAUTHORIZED.value(), e.getMessage(), List.of());
+    }
+
+    @ExceptionHandler(MesmaSenhaException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RespostaErro handleMesmaSenhaException(MesmaSenhaException e) {
+        log.error("Erro na troca de senha: {}", e.getMessage());
+        return new RespostaErro(HttpStatus.BAD_REQUEST.value(), e.getMessage(), List.of());
+    }
 }
