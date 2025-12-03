@@ -24,7 +24,6 @@ public class Loja {
     @Column(name = "descricao", length = 1000, nullable = false)
     private String descricao;
 
-    @Lob
     @Column(name = "imagem", columnDefinition = "TEXT")
     private String imagem;
 

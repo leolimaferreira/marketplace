@@ -29,9 +29,7 @@ public class PagamentoController implements ControllerGenerico {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PagamentoRespostaDTO> atualizarStatusPagamento(
-            @PathVariable("id") UUID id,
-            @RequestBody @Valid PagamentoAtualizacaoDTO dto) {
+    public ResponseEntity<PagamentoRespostaDTO> atualizarStatusPagamento(@PathVariable("id") UUID id, @RequestBody @Valid PagamentoAtualizacaoDTO dto) {
         return ResponseEntity.ok(pagamentoService.atualizarStatusPagamento(id, dto));
     }
 
@@ -43,5 +41,22 @@ public class PagamentoController implements ControllerGenerico {
     @GetMapping("/cliente/{clienteId}")
     public ResponseEntity<List<PagamentoRespostaDTO>> listarPagamentosCliente(@PathVariable(name = "clienteId") UUID clienteId) {
         return ResponseEntity.ok(pagamentoService.listarPagamentosCliente(clienteId));
+    }
+
+    @PostMapping("/{id}/simular-aprovacao")
+    public ResponseEntity<PagamentoRespostaDTO> simularAprovacao(@PathVariable UUID id, @RequestParam(defaultValue = "3") int segundos) throws InterruptedException {
+        Thread.sleep(segundos * 1000L);
+
+        PagamentoAtualizacaoDTO dto = new PagamentoAtualizacaoDTO("CONCLUIDO");
+        PagamentoRespostaDTO resposta = pagamentoService.atualizarStatusPagamento(id, dto);
+
+        return ResponseEntity.ok(resposta);
+
+    }
+
+    @PostMapping("/{id}/simular-rejeicao")
+    public ResponseEntity<PagamentoRespostaDTO> simularRejeicao(@PathVariable UUID id) {
+        PagamentoAtualizacaoDTO dto = new PagamentoAtualizacaoDTO("CANCELADO");
+        return ResponseEntity.ok(pagamentoService.atualizarStatusPagamento(id, dto));
     }
 }

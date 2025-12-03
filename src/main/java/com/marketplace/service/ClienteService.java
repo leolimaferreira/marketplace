@@ -44,6 +44,7 @@ public class ClienteService {
         return clienteMapper.mapearParaClienteRespostaDTO(clienteSalvo);
     }
 
+    @Transactional(readOnly = true)
     public List<ClienteRespostaDTO> listarClientes() {
         return clienteRepository.findAll().stream()
                 .map(clienteMapper::mapearParaClienteRespostaDTO)
