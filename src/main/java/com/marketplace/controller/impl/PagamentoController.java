@@ -4,6 +4,7 @@ import com.marketplace.controller.ControllerGenerico;
 import com.marketplace.dto.pagamento.PagamentoAtualizacaoDTO;
 import com.marketplace.dto.pagamento.PagamentoCriacaoDTO;
 import com.marketplace.dto.pagamento.PagamentoRespostaDTO;
+import com.marketplace.dto.pedido.PedidoAtualizacaoDTO;
 import com.marketplace.service.PagamentoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class PagamentoController implements ControllerGenerico {
 
     @PutMapping("/{id}")
     public ResponseEntity<PagamentoRespostaDTO> atualizarStatusPagamento(@PathVariable("id") UUID id, @RequestBody @Valid PagamentoAtualizacaoDTO dto) {
-        return ResponseEntity.ok(pagamentoService.atualizarStatusPagamento(id, dto));
+        return ResponseEntity.ok(pagamentoService.atualizarStatusPagamento(id, dto, new PedidoAtualizacaoDTO("CONFIRMADO")));
     }
 
     @GetMapping("/{id}")
@@ -48,7 +49,8 @@ public class PagamentoController implements ControllerGenerico {
         Thread.sleep(segundos * 1000L);
 
         PagamentoAtualizacaoDTO dto = new PagamentoAtualizacaoDTO("CONCLUIDO");
-        PagamentoRespostaDTO resposta = pagamentoService.atualizarStatusPagamento(id, dto);
+        PedidoAtualizacaoDTO pedidoStatus = new PedidoAtualizacaoDTO("CONFIRMADO");
+        PagamentoRespostaDTO resposta = pagamentoService.atualizarStatusPagamento(id, dto, pedidoStatus);
 
         return ResponseEntity.ok(resposta);
 
@@ -57,6 +59,7 @@ public class PagamentoController implements ControllerGenerico {
     @PostMapping("/{id}/simular-rejeicao")
     public ResponseEntity<PagamentoRespostaDTO> simularRejeicao(@PathVariable UUID id) {
         PagamentoAtualizacaoDTO dto = new PagamentoAtualizacaoDTO("CANCELADO");
-        return ResponseEntity.ok(pagamentoService.atualizarStatusPagamento(id, dto));
+        PedidoAtualizacaoDTO pedidoStatus = new PedidoAtualizacaoDTO("CANCELADO");
+        return ResponseEntity.ok(pagamentoService.atualizarStatusPagamento(id, dto, pedidoStatus));
     }
 }
