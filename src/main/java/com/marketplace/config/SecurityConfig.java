@@ -51,6 +51,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/pedidos/**").hasAnyRole(ADMIN, VENDEDOR, CLIENTE)
                         .requestMatchers(HttpMethod.PUT, "/pedidos/**").hasAnyRole(ADMIN, VENDEDOR)
                         .requestMatchers(HttpMethod.POST, "/pagamentos").hasRole(CLIENTE)
+                        .requestMatchers(HttpMethod.POST, "/pagamentos/**/**").hasRole(ADMIN)
                         .requestMatchers(HttpMethod.GET, "/pagamentos/cliente/**").hasAnyRole(ADMIN, VENDEDOR, CLIENTE)
                         .requestMatchers(HttpMethod.GET, "/pagamentos/**").hasAnyRole(ADMIN, VENDEDOR, CLIENTE)
                         .requestMatchers(HttpMethod.PUT, "/pagamentos/**").hasAnyRole(ADMIN, VENDEDOR)

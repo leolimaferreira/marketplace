@@ -45,7 +45,6 @@ public class Usuario {
     @Column(name = "ativo", nullable = false)
     private Boolean ativo;
 
-    @Lob
     @Column(name = "imagem", columnDefinition = "TEXT")
     private String imagem;
 

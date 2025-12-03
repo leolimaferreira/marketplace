@@ -36,7 +36,6 @@ public class Produto {
     @Column(name = "ativo", nullable = false)
     private Boolean ativo;
 
-    @Lob
     @Column(name = "imagem", columnDefinition = "TEXT")
     private String imagem;
 

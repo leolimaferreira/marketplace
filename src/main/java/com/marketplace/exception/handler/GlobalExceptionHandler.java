@@ -95,4 +95,19 @@ public class GlobalExceptionHandler {
         log.error("Erro na troca de senha: {}", e.getMessage());
         return new RespostaErro(HttpStatus.BAD_REQUEST.value(), e.getMessage(), List.of());
     }
+
+    @ExceptionHandler(InterruptedException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public RespostaErro handleInterruptedException(InterruptedException e) {
+        log.error("Erro na aprovação/rejeição do pagamento: {}", e.getMessage());
+        Thread.currentThread().interrupt();
+        return new RespostaErro(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), List.of());
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public RespostaErro handleException(Exception e) {
+        log.error("Erro interno do servidor: {}", e.getMessage());
+        return new RespostaErro(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Erro interno do servidor", List.of());
+    }
 }
