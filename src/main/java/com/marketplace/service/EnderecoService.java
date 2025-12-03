@@ -49,4 +49,18 @@ public class EnderecoService {
                 })
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public List<EnderecoRespostaDTO> listarEnderecosPorCliente(UUID clienteId, String token) {
+        DecodedJWT decodedJWT = JWT.decode(token);
+
+        if (!decodedJWT.getSubject().equals(clienteId.toString()) && !decodedJWT.getClaim("role").toString().equals("ADMIN")) {
+            throw new NaoAutorizadoException("Somente o proprietário da conta ou o admin podem ver os endereços");
+        }
+
+        List<Endereco> enderecos = enderecoRepository.findAllByClienteId(clienteId);
+        return enderecos.stream()
+                .map(enderecoMapper::mapearParaEnderecoRespostaDTO)
+                .toList();
+    }
 }
