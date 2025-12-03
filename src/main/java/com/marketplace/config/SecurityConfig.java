@@ -58,6 +58,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/pagamentos/**").hasAnyRole(ADMIN, VENDEDOR)
                         .requestMatchers(HttpMethod.POST, "/itens-pedido").hasRole(CLIENTE)
                         .requestMatchers(HttpMethod.POST, "/enderecos/*").hasAnyRole(ADMIN, CLIENTE)
+                        .requestMatchers(HttpMethod.GET, "/enderecos/*").hasAnyRole(ADMIN, CLIENTE)
                         .requestMatchers(getDocumentationEndpoints()).permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

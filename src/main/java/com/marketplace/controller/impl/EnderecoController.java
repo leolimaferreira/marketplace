@@ -30,4 +30,13 @@ public class EnderecoController implements ControllerGenerico {
         URI location = gerarHeaderLocation(resposta.get(0).id());
         return ResponseEntity.created(location).body(resposta);
     }
+
+    @GetMapping("/{clienteId}")
+    public ResponseEntity<List<EnderecoRespostaDTO>> listarEnderecosPorCliente(
+            @PathVariable(name = "clienteId") UUID clienteId,
+            @RequestHeader("Authorization") String token
+    ) {
+        List<EnderecoRespostaDTO> resposta = enderecoService.listarEnderecosPorCliente(clienteId, token);
+        return ResponseEntity.ok(resposta);
+    }
 }
