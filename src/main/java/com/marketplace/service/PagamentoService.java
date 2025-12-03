@@ -3,6 +3,7 @@ package com.marketplace.service;
 import com.marketplace.dto.pagamento.PagamentoAtualizacaoDTO;
 import com.marketplace.dto.pagamento.PagamentoCriacaoDTO;
 import com.marketplace.dto.pagamento.PagamentoRespostaDTO;
+import com.marketplace.dto.pedido.PedidoAtualizacaoDTO;
 import com.marketplace.exception.NaoEncontradoException;
 import com.marketplace.mapper.PagamentoMapper;
 import com.marketplace.model.Pagamento;
@@ -26,6 +27,7 @@ public class PagamentoService {
     private final PagamentoRepository pagamentoRepository;
     private final PagamentoMapper pagamentoMapper;
     private final ClienteRepository clienteRepository;
+    private final PedidoService pedidoService;
 
     @Transactional
     public PagamentoRespostaDTO criarPagamento(PagamentoCriacaoDTO dto) {
@@ -41,11 +43,13 @@ public class PagamentoService {
     }
 
     @Transactional
-    public PagamentoRespostaDTO atualizarStatusPagamento(UUID id, PagamentoAtualizacaoDTO dto) {
+    public PagamentoRespostaDTO atualizarStatusPagamento(UUID id, PagamentoAtualizacaoDTO dto, PedidoAtualizacaoDTO pedidoStatus) {
         Pagamento pagamento = pagamentoRepository.findById(id)
                 .orElseThrow(() -> new NaoEncontradoException(PAGAMENTO_NAO_ENCONTRADO));
 
         pagamentoMapper.atualizarPagamento(pagamento, dto);
+
+        pedidoService.atualizarStatusPedido(pagamento.getPedido().getId(), pedidoStatus);
 
         Pagamento pagamentoAtualizado = pagamentoRepository.save(pagamento);
         return pagamentoMapper.mapearParaPagamentoResposta(pagamentoAtualizado);
