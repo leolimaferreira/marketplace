@@ -1,6 +1,7 @@
 package com.marketplace.dto.usuario.cliente;
 
 import com.marketplace.annotation.CpfValido;
+import com.marketplace.annotation.RgValido;
 import com.marketplace.annotation.SenhaForte;
 import com.marketplace.dto.endereco.EnderecoCriacaoDTO;
 import jakarta.validation.Valid;
@@ -27,6 +28,7 @@ public record ClienteCriacaoDTO(
         String cpf,
 
         @NotBlank(message = "RG é obrigatório")
+        @RgValido
         String rg,
 
         @NotBlank(message = "Celular é obrigatório")
