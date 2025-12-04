@@ -1,5 +1,6 @@
 package com.marketplace.dto.usuario.dono;
 
+import com.marketplace.annotation.RgValido;
 import com.marketplace.annotation.SenhaForte;
 import jakarta.validation.constraints.*;
 
@@ -24,6 +25,7 @@ public record DonoCriacaoDTO(
         String cpf,
 
         @NotBlank(message = "RG é obrigatório")
+        @RgValido
         String rg,
 
         @NotBlank(message = "Celular é obrigatório")
