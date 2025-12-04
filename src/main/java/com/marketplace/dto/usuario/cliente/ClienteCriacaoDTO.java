@@ -1,5 +1,6 @@
 package com.marketplace.dto.usuario.cliente;
 
+import com.marketplace.annotation.CpfValido;
 import com.marketplace.annotation.SenhaForte;
 import com.marketplace.dto.endereco.EnderecoCriacaoDTO;
 import jakarta.validation.Valid;
@@ -22,7 +23,7 @@ public record ClienteCriacaoDTO(
         String senha,
 
         @NotBlank(message = "CPF é obrigatório")
-        @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "CPF inválido")
+        @CpfValido
         String cpf,
 
         @NotBlank(message = "RG é obrigatório")

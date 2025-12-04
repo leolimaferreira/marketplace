@@ -1,5 +1,6 @@
 package com.marketplace.dto.endereco;
 
+import com.marketplace.annotation.CepValido;
 import jakarta.validation.constraints.*;
 
 public record EnderecoCriacaoDTO(
@@ -26,7 +27,7 @@ public record EnderecoCriacaoDTO(
         String estado,
 
         @NotBlank(message = "CEP é obrigatório")
-        @Pattern(regexp = "\\d{5}-\\d{3}", message = "CEP inválido")
+        @CepValido
         String cep,
 
         Boolean principal
