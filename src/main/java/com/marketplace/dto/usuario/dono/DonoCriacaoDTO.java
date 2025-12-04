@@ -1,5 +1,6 @@
 package com.marketplace.dto.usuario.dono;
 
+import com.marketplace.annotation.CpfValido;
 import com.marketplace.annotation.RgValido;
 import com.marketplace.annotation.SenhaForte;
 import jakarta.validation.constraints.*;
@@ -21,7 +22,7 @@ public record DonoCriacaoDTO(
         String senha,
 
         @NotBlank(message = "CPF é obrigatório")
-        @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "CPF inválido")
+        @CpfValido
         String cpf,
 
         @NotBlank(message = "RG é obrigatório")

@@ -1,5 +1,6 @@
 package com.marketplace.dto.loja;
 
+import com.marketplace.annotation.CnpjValido;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -16,6 +17,7 @@ public record LojaComDonoExistenteDTO(
         String imagem,
 
         @NotBlank
+        @CnpjValido
         String cnpj,
 
         @NotBlank
