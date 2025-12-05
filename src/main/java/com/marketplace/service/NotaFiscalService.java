@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
@@ -30,6 +31,7 @@ import static com.marketplace.utils.Constantes.PAGAMENTO_NAO_ENCONTRADO;
 public class NotaFiscalService {
 
     private final PagamentoRepository pagamentoRepository;
+    private final BancoCentralService bancoCentralService;
 
     public byte[] gerarNotaFiscal(UUID pagamentoId) {
         Pagamento pagamento = pagamentoRepository.findById(pagamentoId)
@@ -101,12 +103,19 @@ public class NotaFiscalService {
                 tabelaProdutos.addCell(criarCelulaDados("R$ " + item.getValorTotal().multiply(BigDecimal.valueOf(item.getQuantidade()))));
             }
 
+            BigDecimal valorDolar = bancoCentralService.converterParaDolar(
+                    pagamento.getValor(),
+                    LocalDate.now()
+            );
+
             document.add(tabelaProdutos.setMarginBottom(15));
 
             Table tabelaTotais = new Table(new float[]{3, 1});
             tabelaTotais.setWidth(UnitValue.createPercentValue(100));
             tabelaTotais.addCell(criarCelulaTitulo("VALOR TOTAL DA NOTA"));
             tabelaTotais.addCell(criarCelulaTitulo("R$ " + pagamento.getValor()).setTextAlignment(TextAlignment.RIGHT));
+            tabelaTotais.addCell(criarCelulaTitulo("VALOR EM USD"));
+            tabelaTotais.addCell(criarCelulaTitulo("$ " + valorDolar).setTextAlignment(TextAlignment.RIGHT));
             document.add(tabelaTotais.setMarginBottom(20));
 
             document.add(new Paragraph("Este documento é uma representação simplificada da Nota Fiscal Eletrônica.")
