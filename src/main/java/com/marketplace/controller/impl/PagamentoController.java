@@ -5,9 +5,12 @@ import com.marketplace.dto.pagamento.PagamentoAtualizacaoDTO;
 import com.marketplace.dto.pagamento.PagamentoCriacaoDTO;
 import com.marketplace.dto.pagamento.PagamentoRespostaDTO;
 import com.marketplace.dto.pedido.PedidoAtualizacaoDTO;
+import com.marketplace.service.NotaFiscalService;
 import com.marketplace.service.PagamentoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +24,7 @@ import java.util.UUID;
 public class PagamentoController implements ControllerGenerico {
 
     private final PagamentoService pagamentoService;
+    private final NotaFiscalService notaFiscalService;
 
     @PostMapping
     public ResponseEntity<PagamentoRespostaDTO> criarPagamento(@RequestBody @Valid PagamentoCriacaoDTO dto) {
@@ -61,5 +65,19 @@ public class PagamentoController implements ControllerGenerico {
         PagamentoAtualizacaoDTO dto = new PagamentoAtualizacaoDTO("CANCELADO");
         PedidoAtualizacaoDTO pedidoStatus = new PedidoAtualizacaoDTO("CANCELADO");
         return ResponseEntity.ok(pagamentoService.atualizarStatusPagamento(id, dto, pedidoStatus));
+    }
+
+    @GetMapping("/{id}/nota-fiscal")
+    public ResponseEntity<byte[]> gerarNotaFiscal(@PathVariable UUID id) {
+        byte[] pdf = notaFiscalService.gerarNotaFiscal(id);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("filename", "nota-fiscal-" + id + ".pdf");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .body(pdf);
     }
 }
