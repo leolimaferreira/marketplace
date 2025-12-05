@@ -1,5 +1,6 @@
 package com.marketplace.mapper;
 
+import com.marketplace.dto.endereco.EnderecoAtualizacaoDTO;
 import com.marketplace.dto.endereco.EnderecoCriacaoDTO;
 import com.marketplace.dto.endereco.EnderecoRespostaDTO;
 import com.marketplace.exception.NaoEncontradoException;
@@ -46,5 +47,16 @@ public class EnderecoMapper {
                 endereco.getCep(),
                 endereco.getPrincipal()
         );
+    }
+
+    public void atualizarEndereco(Endereco endereco, EnderecoAtualizacaoDTO dto) {
+        if (dto.logradouro() != null) endereco.setLogradouro(dto.logradouro());
+        if (dto.numero() != null) endereco.setNumero(dto.numero());
+        if (dto.complemento() != null) endereco.setComplemento(dto.complemento());
+        if (dto.cep() != null) endereco.setCep(dto.cep());
+        if (dto.bairro() != null) endereco.setBairro(dto.bairro());
+        if (dto.cidade() != null) endereco.setCidade(dto.cidade());
+        if (dto.estado() != null) endereco.setEstado(dto.estado());
+        if (dto.principal() != null) endereco.setPrincipal(dto.principal());
     }
 }

@@ -1,6 +1,7 @@
 package com.marketplace.controller.impl;
 
 import com.marketplace.controller.ControllerGenerico;
+import com.marketplace.dto.endereco.EnderecoAtualizacaoDTO;
 import com.marketplace.dto.endereco.EnderecoCriacaoDTO;
 import com.marketplace.dto.endereco.EnderecoRespostaDTO;
 import com.marketplace.service.EnderecoService;
@@ -38,5 +39,14 @@ public class EnderecoController implements ControllerGenerico {
     ) {
         List<EnderecoRespostaDTO> resposta = enderecoService.listarEnderecosPorCliente(clienteId, token);
         return ResponseEntity.ok(resposta);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EnderecoRespostaDTO> atualizarEndereco(
+            @PathVariable UUID id,
+            @RequestBody @Valid EnderecoAtualizacaoDTO dto,
+            @RequestHeader("Authorization") String token
+    ) {
+        return ResponseEntity.ok(enderecoService.atualizarEndereco(id, dto, token));
     }
 }
