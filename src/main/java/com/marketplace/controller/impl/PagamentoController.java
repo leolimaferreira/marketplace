@@ -68,8 +68,11 @@ public class PagamentoController implements ControllerGenerico {
     }
 
     @GetMapping("/{id}/nota-fiscal")
-    public ResponseEntity<byte[]> gerarNotaFiscal(@PathVariable UUID id) {
-        byte[] pdf = notaFiscalService.gerarNotaFiscal(id);
+    public ResponseEntity<byte[]> gerarNotaFiscal(
+            @PathVariable UUID id,
+            @RequestHeader("Authorization") String token
+    ) {
+        byte[] pdf = notaFiscalService.gerarNotaFiscal(id, token);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
