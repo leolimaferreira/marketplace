@@ -50,6 +50,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/pedidos/cliente/**").hasAnyRole(ADMIN, VENDEDOR, CLIENTE)
                         .requestMatchers(HttpMethod.GET, "/pedidos/**").hasAnyRole(ADMIN, VENDEDOR, CLIENTE)
                         .requestMatchers(HttpMethod.PUT, "/pedidos/**").hasAnyRole(ADMIN, VENDEDOR)
+                        .requestMatchers(HttpMethod.GET, "/pagamentos/*/nota-fiscal").permitAll()
                         .requestMatchers(HttpMethod.POST, "/pagamentos").hasRole(CLIENTE)
                         .requestMatchers(HttpMethod.POST, "/pagamentos/*/simular-aprovacao").hasRole(ADMIN)
                         .requestMatchers(HttpMethod.POST, "/pagamentos/*/simular-rejeicao").hasRole(ADMIN)
