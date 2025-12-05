@@ -14,7 +14,7 @@ public class CepValidator implements ConstraintValidator<CepValido, String> {
     @Override
     public boolean isValid(String cep, ConstraintValidatorContext context) {
         if (cep == null || cep.isBlank()) {
-            return false;
+            return true;
         }
 
         String cepNumerico = cep.replaceAll("\\D", "");

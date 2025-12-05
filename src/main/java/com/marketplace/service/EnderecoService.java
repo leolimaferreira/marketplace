@@ -2,9 +2,11 @@ package com.marketplace.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.marketplace.dto.endereco.EnderecoAtualizacaoDTO;
 import com.marketplace.dto.endereco.EnderecoCriacaoDTO;
 import com.marketplace.dto.endereco.EnderecoRespostaDTO;
 import com.marketplace.exception.NaoAutorizadoException;
+import com.marketplace.exception.NaoEncontradoException;
 import com.marketplace.mapper.EnderecoMapper;
 import com.marketplace.model.Endereco;
 import com.marketplace.repository.EnderecoRepository;
@@ -14,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+
+import static com.marketplace.utils.Constantes.ADMIN;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +35,7 @@ public class EnderecoService {
     public List<EnderecoRespostaDTO> adicionarEndereco(List<EnderecoCriacaoDTO> enderecos, UUID clienteId, String token) {
         DecodedJWT decodedJWT = JWT.decode(token);
 
-        if (!decodedJWT.getSubject().equals(clienteId.toString()) && !decodedJWT.getClaim("role").toString().equals("ADMIN")) {
+        if (!decodedJWT.getSubject().equals(clienteId.toString()) && !decodedJWT.getClaim("role").toString().equals(ADMIN)) {
             throw new NaoAutorizadoException("Somente o proprietário da conta ou o admin podem adicionar endereços");
         }
 
@@ -54,7 +58,7 @@ public class EnderecoService {
     public List<EnderecoRespostaDTO> listarEnderecosPorCliente(UUID clienteId, String token) {
         DecodedJWT decodedJWT = JWT.decode(token);
 
-        if (!decodedJWT.getSubject().equals(clienteId.toString()) && !decodedJWT.getClaim("role").toString().equals("ADMIN")) {
+        if (!decodedJWT.getSubject().equals(clienteId.toString()) && !decodedJWT.getClaim("role").toString().equals(ADMIN)) {
             throw new NaoAutorizadoException("Somente o proprietário da conta ou o admin podem ver os endereços");
         }
 
@@ -62,5 +66,27 @@ public class EnderecoService {
         return enderecos.stream()
                 .map(enderecoMapper::mapearParaEnderecoRespostaDTO)
                 .toList();
+    }
+
+    @Transactional
+    public EnderecoRespostaDTO atualizarEndereco(UUID id, EnderecoAtualizacaoDTO dto, String token) {
+        DecodedJWT decodedJWT = JWT.decode(token);
+        Endereco endereco = enderecoRepository.findById(id)
+                .orElseThrow(() -> new NaoEncontradoException("Endereço não encontrado"));
+
+        if (!decodedJWT.getSubject().equals(endereco.getCliente().getId().toString()) && !decodedJWT.getClaim("role").toString().equals(ADMIN)) {
+            throw new NaoAutorizadoException("Somente o proprietário da conta ou o admin podem atualizar o endereço");
+        }
+
+        if (Boolean.TRUE.equals(dto.principal())) {
+            enderecoRepository.findPrincipalByClienteId(endereco.getCliente().getId()).ifPresent(enderecoPrincipal -> {
+                enderecoPrincipal.setPrincipal(false);
+                enderecoRepository.save(enderecoPrincipal);
+            });
+        }
+
+        enderecoMapper.atualizarEndereco(endereco, dto);
+        Endereco atualizado = enderecoRepository.save(endereco);
+        return enderecoMapper.mapearParaEnderecoRespostaDTO(atualizado);
     }
 }
