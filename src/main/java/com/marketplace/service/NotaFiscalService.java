@@ -1,5 +1,7 @@
 package com.marketplace.service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -10,6 +12,7 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
+import com.marketplace.exception.NaoAutorizadoException;
 import com.marketplace.exception.NaoEncontradoException;
 import com.marketplace.model.ItemPedido;
 import com.marketplace.model.Pagamento;
@@ -24,6 +27,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+import static com.marketplace.utils.Constantes.ADMIN;
 import static com.marketplace.utils.Constantes.PAGAMENTO_NAO_ENCONTRADO;
 
 @Service
@@ -33,9 +37,15 @@ public class NotaFiscalService {
     private final PagamentoRepository pagamentoRepository;
     private final BancoCentralService bancoCentralService;
 
-    public byte[] gerarNotaFiscal(UUID pagamentoId) {
+    public byte[] gerarNotaFiscal(UUID pagamentoId, String token) {
         Pagamento pagamento = pagamentoRepository.findById(pagamentoId)
                 .orElseThrow(() -> new NaoEncontradoException(PAGAMENTO_NAO_ENCONTRADO));
+
+        DecodedJWT decodedJWT = JWT.decode(token);
+
+        if (!decodedJWT.getSubject().equals(pagamento.getPedido().getCliente().getId().toString()) && !decodedJWT.getClaim("role").asString().equals(ADMIN)) {
+            throw new NaoAutorizadoException("Somente o cliente ou um administrador podem gerar a nota fiscal");
+        }
 
         if (!pagamento.getStatus().toString().equals("CONCLUIDO")) {
             throw new IllegalStateException("Pagamento não está concluído");
