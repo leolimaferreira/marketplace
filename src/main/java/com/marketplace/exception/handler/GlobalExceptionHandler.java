@@ -60,6 +60,26 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(PedidoNaoEntregueException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RespostaErro handlePedidoNaoEntregueException(PedidoNaoEntregueException e) {
+        return new RespostaErro(
+                HttpStatus.BAD_REQUEST.value(),
+                e.getMessage(),
+                List.of()
+        );
+    }
+
+    @ExceptionHandler(PedidoJaAvaliadoException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RespostaErro handlePedidoJaAvaliadoException(PedidoJaAvaliadoException e) {
+        return new RespostaErro(
+                HttpStatus.BAD_REQUEST.value(),
+                e.getMessage(),
+                List.of()
+        );
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public RespostaErro handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
