@@ -5,6 +5,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.marketplace.dto.avaliacao.AvaliacaoAtualizacaoDTO;
 import com.marketplace.dto.avaliacao.AvaliacaoCriacaoDTO;
 import com.marketplace.dto.avaliacao.AvaliacaoRespostaDTO;
+import com.marketplace.dto.avaliacao.ListarAvaliacoesProdutoELojaRequest;
 import com.marketplace.exception.NaoAutorizadoException;
 import com.marketplace.exception.NaoEncontradoException;
 import com.marketplace.exception.PedidoJaAvaliadoException;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 import static com.marketplace.utils.Constantes.AVALIACAO_NAO_ENCONTRADA;
@@ -71,5 +73,14 @@ public class AvaliacaoService {
         Avaliacao avaliacaoAtualizada = avaliacaoRepository.save(avaliacao);
 
         return avaliacaoMapper.mapearParaAvaliacaoRespostaDTO(avaliacaoAtualizada);
+    }
+
+    @Transactional(readOnly = true)
+    public List<AvaliacaoRespostaDTO> listarAvaliacoesProdutoELoja(ListarAvaliacoesProdutoELojaRequest dto) {
+        List<Avaliacao> avaliacoes = avaliacaoRepository.findByProdutoIdAndLojaId(dto.produtoId(), dto.lojaId());
+        return avaliacoes
+                .stream()
+                .map(avaliacaoMapper::mapearParaAvaliacaoRespostaDTO)
+                .toList();
     }
 }
