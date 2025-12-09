@@ -4,6 +4,7 @@ import com.marketplace.controller.ControllerGenerico;
 import com.marketplace.dto.avaliacao.AvaliacaoAtualizacaoDTO;
 import com.marketplace.dto.avaliacao.AvaliacaoCriacaoDTO;
 import com.marketplace.dto.avaliacao.AvaliacaoRespostaDTO;
+import com.marketplace.dto.avaliacao.ListarAvaliacoesProdutoELojaRequest;
 import com.marketplace.service.AvaliacaoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -36,5 +38,10 @@ public class AvaliacaoController implements ControllerGenerico {
             @RequestHeader(name = "Authorization") String token) {
         AvaliacaoRespostaDTO avaliacaoRespostaDTO = avaliacaoService.atualizarAvaliacao(id, dto, token);
         return ResponseEntity.ok(avaliacaoRespostaDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AvaliacaoRespostaDTO>> listarAvaliacoes(@RequestBody @Valid ListarAvaliacoesProdutoELojaRequest dto){
+        return ResponseEntity.ok(avaliacaoService.listarAvaliacoesProdutoELoja(dto));
     }
 }
