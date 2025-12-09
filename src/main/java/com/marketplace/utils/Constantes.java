@@ -15,4 +15,5 @@ public class Constantes {
     public static final String ADMIN = "ADMIN";
     public static final String CLIENTES_URL = "/clientes/**";
     public static final String PRODUTOS_URL = "/produtos/**";
+    public static final String AVALIACAO_NAO_ENCONTRADA = "Avaliação não encontrada";
 }

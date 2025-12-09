@@ -1,5 +1,6 @@
 package com.marketplace.mapper;
 
+import com.marketplace.dto.avaliacao.AvaliacaoAtualizacaoDTO;
 import com.marketplace.dto.avaliacao.AvaliacaoCriacaoDTO;
 import com.marketplace.dto.avaliacao.AvaliacaoRespostaDTO;
 import com.marketplace.exception.NaoEncontradoException;
@@ -37,5 +38,13 @@ public class AvaliacaoMapper {
                 avaliacao.getDataCriacao(),
                 avaliacao.getDataAtualizacao()
         );
+    }
+
+    public void atualizarAvaliacao(Avaliacao avaliacao, AvaliacaoAtualizacaoDTO dto) {
+        if (dto.nota() != null) avaliacao.setNota(dto.nota());
+
+        if (dto.comentario() != null) avaliacao.setComentario(dto.comentario());
+
+        if (dto.imagens() != null) avaliacao.setImagens(dto.imagens());
     }
 }

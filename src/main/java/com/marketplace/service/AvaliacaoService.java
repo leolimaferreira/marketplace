@@ -2,6 +2,7 @@ package com.marketplace.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.marketplace.dto.avaliacao.AvaliacaoAtualizacaoDTO;
 import com.marketplace.dto.avaliacao.AvaliacaoCriacaoDTO;
 import com.marketplace.dto.avaliacao.AvaliacaoRespostaDTO;
 import com.marketplace.exception.NaoAutorizadoException;
@@ -17,6 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
+import static com.marketplace.utils.Constantes.AVALIACAO_NAO_ENCONTRADA;
 import static com.marketplace.utils.Constantes.PEDIDO_NAO_ENCONTRADO;
 
 @Service
@@ -50,5 +54,22 @@ public class AvaliacaoService {
         Avaliacao avaliacaoSalva = avaliacaoRepository.save(avaliacao);
 
         return avaliacaoMapper.mapearParaAvaliacaoRespostaDTO(avaliacaoSalva);
+    }
+
+    @Transactional
+    public AvaliacaoRespostaDTO atualizarAvaliacao(UUID id, AvaliacaoAtualizacaoDTO dto, String token) {
+        Avaliacao avaliacao = avaliacaoRepository.findById(id)
+                .orElseThrow(() -> new NaoEncontradoException(AVALIACAO_NAO_ENCONTRADA));
+
+        DecodedJWT decodedJWT = JWT.decode(token);
+
+        if (!avaliacao.getPedido().getCliente().getId().toString().equals(decodedJWT.getSubject())) {
+            throw new NaoAutorizadoException("Somente o cliente que realizou o pedido pode atualizar a avaliação");
+        }
+
+        avaliacaoMapper.atualizarAvaliacao(avaliacao, dto);
+        Avaliacao avaliacaoAtualizada = avaliacaoRepository.save(avaliacao);
+
+        return avaliacaoMapper.mapearParaAvaliacaoRespostaDTO(avaliacaoAtualizada);
     }
 }
