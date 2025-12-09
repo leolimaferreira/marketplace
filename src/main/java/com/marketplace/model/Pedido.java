@@ -42,6 +42,9 @@ public class Pedido {
     @Column(name = "status", nullable = false)
     private PedidoStatus status = PedidoStatus.PENDENTE;
 
+    @Column(name = "avaliado", nullable = false)
+    private Boolean avaliado = false;
+
     @Column(name = "data_criacao", nullable = false)
     private LocalDateTime dataCriacao;
 
